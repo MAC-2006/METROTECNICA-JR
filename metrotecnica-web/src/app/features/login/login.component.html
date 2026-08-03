@@ -1,0 +1,90 @@
+<div class="login">
+  <section class="login__panel login__panel--brand" aria-hidden="true">
+    <a routerLink="/" class="login__logo">METRO<strong>TÉCNICA</strong></a>
+
+    <div class="gauge" [class.gauge--loading]="isLoading()">
+      <svg viewBox="0 0 200 200" class="gauge__dial">
+        <circle cx="100" cy="100" r="86" class="gauge__ring" />
+        @for (tick of gaugeTicks; track $index) {
+          <line [attr.x1]="tick.x1" [attr.y1]="tick.y1" [attr.x2]="tick.x2" [attr.y2]="tick.y2" class="gauge__tick" />
+        }
+      </svg>
+      <div class="gauge__needle"></div>
+      <span class="gauge__label">{{ isLoading() ? 'Verificando' : 'Aguardando acesso' }}</span>
+    </div>
+
+    <p class="login__brand-text">
+      Cada acesso ao sistema fica registrado — como cada medição em um
+      certificado, rastreável do início ao fim.
+    </p>
+  </section>
+
+  <section class="login__panel login__panel--form">
+    <div class="login__form-inner">
+      <span class="eyebrow">Área do Cliente</span>
+      <h1 class="login__title">Entrar no sistema</h1>
+      <p class="login__subtitle">Acesse com as credenciais fornecidas pela Metrotécnica.</p>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" class="login-form" novalidate>
+        <label class="field">
+          <span class="field__label">E-mail</span>
+          <input
+            type="email"
+            formControlName="email"
+            autocomplete="email"
+            placeholder="seu@email.com"
+            class="field__input"
+            [class.field__input--error]="form.controls.email.invalid && form.controls.email.touched"
+          />
+          @if (form.controls.email.invalid && form.controls.email.touched) {
+            <span class="field__error">Informe um e-mail válido.</span>
+          }
+        </label>
+
+        <label class="field">
+          <span class="field__label">Senha</span>
+          <div class="field__password">
+            <input
+              [type]="showPassword() ? 'text' : 'password'"
+              formControlName="password"
+              autocomplete="current-password"
+              placeholder="••••••••"
+              class="field__input"
+              [class.field__input--error]="form.controls.password.invalid && form.controls.password.touched"
+            />
+            <button
+              type="button"
+              class="field__toggle"
+              (click)="togglePassword()"
+              [attr.aria-label]="showPassword() ? 'Ocultar senha' : 'Mostrar senha'"
+            >
+              @if (showPassword()) {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.4 5.5A9.4 9.4 0 0 1 12 5c5.5 0 9 4.5 10.5 7-.5.9-1.4 2.2-2.7 3.5M6.5 6.9C4.3 8.4 2.9 10.4 1.5 12c1.6 2.6 5.2 7 10.5 7 1.1 0 2.2-.2 3.2-.5" />
+                </svg>
+              } @else {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12Z" />
+                  <circle cx="12" cy="12" r="3.2" />
+                </svg>
+              }
+            </button>
+          </div>
+          @if (form.controls.password.invalid && form.controls.password.touched) {
+            <span class="field__error">Informe sua senha.</span>
+          }
+        </label>
+
+        @if (errorMessage()) {
+          <div class="login-form__alert" role="alert">{{ errorMessage() }}</div>
+        }
+
+        <button type="submit" class="btn btn--primary login-form__submit" [disabled]="isLoading()">
+          {{ isLoading() ? 'Verificando…' : 'Entrar' }}
+        </button>
+      </form>
+
+      <a routerLink="/" class="login__back">← Voltar ao site</a>
+    </div>
+  </section>
+</div>

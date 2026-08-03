@@ -1,0 +1,171 @@
+:host {
+  --ink: #10151c;
+  --paper: #f2efe6;
+  --paper-soft: #e9e5d8;
+  --blueprint: #1e3a5f;
+  --signal: #c8862f;
+  --signal-soft: #e0ab5c;
+  --line: rgba(16, 21, 28, 0.12);
+  --muted: #5b6472;
+  --danger: #b3432f;
+
+  --font-display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --font-body: 'IBM Plex Sans', 'Inter', system-ui, sans-serif;
+
+  display: block;
+  min-height: 100vh;
+  background: var(--paper-soft);
+  font-family: var(--font-body);
+}
+
+.admin__topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.1rem 1.75rem;
+  background: var(--ink);
+  border-bottom: 1px solid rgba(242, 239, 230, 0.1);
+}
+
+.admin__logo {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--paper);
+  letter-spacing: 0.06em;
+
+  strong { color: var(--signal-soft); font-weight: 700; }
+}
+
+.admin__user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: rgba(242, 239, 230, 0.7);
+}
+
+.admin__role {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--signal-soft);
+  border: 1px solid rgba(200, 134, 47, 0.4);
+  padding: 0.2rem 0.55rem;
+  border-radius: 3px;
+}
+
+.admin__logout {
+  background: transparent;
+  border: 1px solid rgba(242, 239, 230, 0.25);
+  color: var(--paper);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.45rem 0.9rem;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    border-color: var(--signal-soft);
+    color: var(--signal-soft);
+  }
+}
+
+.admin__content {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--blueprint);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+
+  &::before {
+    content: '';
+    width: 14px;
+    height: 1px;
+    background: var(--signal);
+  }
+}
+
+.admin__title {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 0.5rem;
+}
+
+.admin__subtitle {
+  color: var(--muted);
+  margin: 0 0 2rem;
+}
+
+.admin__alert {
+  font-size: 0.9rem;
+  color: var(--danger);
+  background: rgba(179, 67, 47, 0.08);
+  border: 1px solid rgba(179, 67, 47, 0.25);
+  padding: 0.9rem 1.1rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+}
+
+.admin__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.tenant-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1.1rem 1.3rem;
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  &__name {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  &__slug {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  &__btn {
+    background: var(--blueprint);
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.3rem;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+
+    &:hover:not(:disabled) { background: #2a4a75; }
+    &:disabled { opacity: 0.6; cursor: not-allowed; }
+  }
+}

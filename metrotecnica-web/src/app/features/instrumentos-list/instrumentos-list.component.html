@@ -1,0 +1,93 @@
+<div class="lista">
+  <header class="lista__topbar">
+    <span class="lista__logo">METRO<strong>TÉCNICA</strong></span>
+    <div class="lista__user">
+      <a routerLink="/dashboard" class="lista__voltar">← Painel</a>
+      <span class="lista__role">{{ auth.role() }}</span>
+      <button type="button" class="lista__logout" (click)="sair()">Sair</button>
+    </div>
+  </header>
+
+  <main class="lista__content">
+    <span class="eyebrow">Área do Cliente</span>
+    <h1 class="lista__title">Instrumentos</h1>
+
+    <div class="filtros">
+      <input
+        type="text"
+        class="filtros__busca"
+        placeholder="Buscar por TAG, descrição ou sequência…"
+        [ngModel]="search()"
+        (ngModelChange)="onSearchInput($event)"
+      />
+
+      <select class="filtros__select" [ngModel]="month()" (ngModelChange)="month.set($event); onFiltroChange()">
+        <option [ngValue]="null">Mês</option>
+        @for (m of meses; track m.valor) {
+          <option [ngValue]="m.valor">{{ m.nome }}</option>
+        }
+      </select>
+
+      <select class="filtros__select" [ngModel]="year()" (ngModelChange)="year.set($event); onFiltroChange()">
+        <option [ngValue]="null">Ano</option>
+        @for (a of anos; track a) {
+          <option [ngValue]="a">{{ a }}</option>
+        }
+      </select>
+
+      <button type="button" class="filtros__limpar" (click)="limparFiltros()">Limpar</button>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="lista__alert" role="alert">{{ errorMessage() }}</div>
+    }
+
+    @if (isLoading()) {
+      <p class="lista__text">Carregando…</p>
+    } @else if (instrumentos().length === 0) {
+      <p class="lista__text">Nenhum instrumento encontrado.</p>
+    } @else {
+      <div class="tabela-wrap">
+        <table class="tabela">
+          <thead>
+            <tr>
+              <th>Nº</th>
+              <th>TAG</th>
+              <th>Descrição</th>
+              <th>Última calibração</th>
+              <th>Próxima calibração</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (i of instrumentos(); track i.id) {
+              <tr>
+                <td class="mono">{{ i.numeroSequencial }}</td>
+                <td class="mono destaque">{{ i.identificacao }}</td>
+                <td>{{ i.descricao }}</td>
+                <td>{{ i.dataCertificacao ? (i.dataCertificacao | date: 'dd/MM/yyyy') : '---' }}</td>
+                <td>{{ i.proxCalibFormatada }}</td>
+                <td>
+                  <span
+                    class="badge"
+                    [class.badge--ok]="i.statusGeral === 'APROVADO'"
+                    [class.badge--erro]="i.statusGeral === 'REPROVADO'"
+                    [class.badge--neutro]="i.statusGeral !== 'APROVADO' && i.statusGeral !== 'REPROVADO'"
+                  >
+                    {{ i.statusGeral }}
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="paginacao">
+        <button type="button" [disabled]="paginaAtual() === 1" (click)="irParaPagina(paginaAtual() - 1)">←</button>
+        <span>Página {{ paginaAtual() }} de {{ totalPaginas() }}</span>
+        <button type="button" [disabled]="paginaAtual() === totalPaginas()" (click)="irParaPagina(paginaAtual() + 1)">→</button>
+      </div>
+    }
+  </main>
+</div>

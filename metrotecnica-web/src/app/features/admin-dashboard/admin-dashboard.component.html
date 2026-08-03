@@ -1,0 +1,45 @@
+<div class="admin">
+  <header class="admin__topbar">
+    <span class="admin__logo">METRO<strong>TÉCNICA</strong></span>
+    <div class="admin__user">
+      <span class="admin__role">super-admin</span>
+      <span class="admin__email">{{ auth.email() }}</span>
+      <button type="button" class="admin__logout" (click)="sair()">Sair</button>
+    </div>
+  </header>
+
+  <main class="admin__content">
+    <span class="eyebrow">Painel Global</span>
+    <h1 class="admin__title">Empresas cadastradas</h1>
+    <p class="admin__subtitle">Acesse o painel de uma empresa específica para gerenciar seus instrumentos.</p>
+
+    @if (errorMessage()) {
+      <div class="admin__alert" role="alert">{{ errorMessage() }}</div>
+    }
+
+    @if (isLoading()) {
+      <p class="admin__text">Carregando empresas…</p>
+    } @else if (tenants().length === 0) {
+      <p class="admin__text">Nenhuma empresa cadastrada ainda.</p>
+    } @else {
+      <div class="admin__list">
+        @for (tenant of tenants(); track tenant.id) {
+          <div class="tenant-card">
+            <div class="tenant-card__info">
+              <span class="tenant-card__name">{{ tenant.name }}</span>
+              <span class="tenant-card__slug">{{ tenant.slug }}</span>
+            </div>
+            <button
+              type="button"
+              class="tenant-card__btn"
+              [disabled]="impersonandoId() === tenant.id"
+              (click)="acessarEmpresa(tenant)"
+            >
+              {{ impersonandoId() === tenant.id ? 'Acessando…' : 'Acessar' }}
+            </button>
+          </div>
+        }
+      </div>
+    }
+  </main>
+</div>

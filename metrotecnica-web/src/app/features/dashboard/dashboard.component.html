@@ -1,0 +1,37 @@
+<div class="dashboard">
+  <header class="dashboard__topbar">
+    <span class="dashboard__logo">METRO<strong>TÉCNICA</strong></span>
+    <div class="dashboard__user">
+      <span class="dashboard__role">{{ auth.role() }}</span>
+      <span class="dashboard__email">{{ auth.email() }}</span>
+      <button type="button" class="dashboard__logout" (click)="sair()">Sair</button>
+    </div>
+  </header>
+
+  <main class="dashboard__content">
+    <span class="eyebrow">Área do Cliente</span>
+    <h1 class="dashboard__title">Painel de calibrações</h1>
+    <a routerLink="/instrumentos" class="dashboard__cta">Ver instrumentos →</a>
+
+    @if (isLoading()) {
+      <p class="dashboard__text">Carregando estatísticas…</p>
+    } @else if (errorMessage()) {
+      <div class="dashboard__alert" role="alert">{{ errorMessage() }}</div>
+    } @else if (stats()) {
+      <div class="dashboard__stats">
+        <div class="stat-card stat-card--danger">
+          <span class="stat-card__value">{{ stats()!.vencidos }}</span>
+          <span class="stat-card__label">Vencidos</span>
+        </div>
+        <div class="stat-card stat-card--warning">
+          <span class="stat-card__value">{{ stats()!.alerta }}</span>
+          <span class="stat-card__label">Em alerta (30 dias)</span>
+        </div>
+        <div class="stat-card stat-card--neutral">
+          <span class="stat-card__value">{{ stats()!.total }}</span>
+          <span class="stat-card__label">Total de instrumentos</span>
+        </div>
+      </div>
+    }
+  </main>
+</div>

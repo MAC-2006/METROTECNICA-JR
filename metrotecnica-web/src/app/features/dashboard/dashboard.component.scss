@@ -1,0 +1,177 @@
+:host {
+  --ink: #10151c;
+  --paper: #f2efe6;
+  --paper-soft: #e9e5d8;
+  --blueprint: #1e3a5f;
+  --signal: #c8862f;
+  --signal-soft: #e0ab5c;
+  --line: rgba(16, 21, 28, 0.12);
+  --muted: #5b6472;
+
+  --font-display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --font-body: 'IBM Plex Sans', 'Inter', system-ui, sans-serif;
+
+  display: block;
+  min-height: 100vh;
+  background: var(--paper-soft);
+  font-family: var(--font-body);
+}
+
+.dashboard__topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.1rem 1.75rem;
+  background: var(--ink);
+  border-bottom: 1px solid rgba(242, 239, 230, 0.1);
+}
+
+.dashboard__logo {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--paper);
+  letter-spacing: 0.06em;
+
+  strong { color: var(--signal-soft); font-weight: 700; }
+}
+
+.dashboard__user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: rgba(242, 239, 230, 0.7);
+}
+
+.dashboard__role {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--signal-soft);
+  border: 1px solid rgba(200, 134, 47, 0.4);
+  padding: 0.2rem 0.55rem;
+  border-radius: 3px;
+}
+
+.dashboard__logout {
+  background: transparent;
+  border: 1px solid rgba(242, 239, 230, 0.25);
+  color: var(--paper);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.45rem 0.9rem;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    border-color: var(--signal-soft);
+    color: var(--signal-soft);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 2px;
+  }
+}
+
+.dashboard__content {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 5rem 1.5rem;
+  text-align: center;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--blueprint);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+
+  &::before {
+    content: '';
+    width: 14px;
+    height: 1px;
+    background: var(--signal);
+  }
+}
+
+.dashboard__title {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 1rem;
+}
+
+.dashboard__text {
+  color: var(--muted);
+  line-height: 1.7;
+  margin: 0;
+}
+
+// ---------- Adicionar ao final de dashboard.component.scss ----------
+
+.dashboard__alert {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: #b3432f;
+  background: rgba(179, 67, 47, 0.08);
+  border: 1px solid rgba(179, 67, 47, 0.25);
+  padding: 0.9rem 1.1rem;
+  border-radius: 6px;
+  text-align: left;
+}
+
+.dashboard__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+  text-align: left;
+}
+
+.stat-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1.5rem;
+  background: #fff;
+
+  &__value {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 2.1rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  &__label {
+    display: block;
+    margin-top: 0.4rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  &--danger &__value { color: #b3432f; }
+  &--warning &__value { color: var(--signal); }
+  &--neutral &__value { color: var(--blueprint); }
+}
+
+.dashboard__cta {
+  display: inline-block;
+  margin-top: 1.25rem;
+  color: var(--blueprint);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.9rem;
+
+  &:hover { text-decoration: underline; }
+}

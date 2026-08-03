@@ -1,0 +1,22 @@
+# Java / Maven
+api/target/
+*.class
+
+# Angular / Node
+metrotecnica-web/node_modules/
+metrotecnica-web/dist/
+metrotecnica-web/.angular/
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env locais (se você criar um .env)
+.env
+
+consolidado_projeto.txt

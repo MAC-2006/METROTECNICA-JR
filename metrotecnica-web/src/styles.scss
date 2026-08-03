@@ -1,0 +1,30 @@
+/* You can add global styles to this file, and also import other style files */
+@use "tailwindcss";
+
+:root {
+  --graphite: #0f1319;
+  --graphite-soft: #161c25;
+  --steel: #4b5563;
+  --teal: #2dd4bf;
+  --teal-soft: #5eead4;
+  --violet: #818cf8;
+  --paper: #f4f5f7;
+  --muted: #96a1b2;
+  --line: rgba(255, 255, 255, 0.08);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--graphite);
+}

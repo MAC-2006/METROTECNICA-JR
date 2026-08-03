@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    username: root
+    password: sua_senha_aqui
+jwt:
+  secret: gere_uma_string_aleatoria_longa_aqui
