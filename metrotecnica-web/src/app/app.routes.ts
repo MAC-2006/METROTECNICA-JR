@@ -17,6 +17,16 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+  path: 'instrumentos/novo',
+  loadComponent: () => import('./features/instrumento-form/instrumento-form.component').then((m) => m.InstrumentoFormComponent),
+  canActivate: [authGuard]
+  },
+  {
+    path: 'instrumentos/:id/editar',
+    loadComponent: () => import('./features/instrumento-form/instrumento-form.component').then((m) => m.InstrumentoFormComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: 'instrumentos',
     loadComponent: () => import('./features/instrumentos-list/instrumentos-list.component').then((m) => m.InstrumentosListComponent),
     canActivate: [authGuard]
@@ -26,5 +36,11 @@ export const routes: Routes = [
     loadComponent: () => import('./features/admin-dashboard/admin-dashboard.component').then((m) => m.AdminDashboardComponent),
     canActivate: [adminGuard]
   },
+  {
+    path: 'auxiliares',
+    loadComponent: () => import('./features/auxiliares/auxiliares.component').then((m) => m.AuxiliaresComponent),
+    canActivate: [authGuard]
+  },
+  
   { path: '**', redirectTo: '' }
 ];

@@ -1,0 +1,229 @@
+<div class="form-page">
+  <header class="form-page__topbar">
+    <span class="form-page__logo">METRO<strong>TÉCNICA</strong></span>
+    <div class="form-page__user">
+      <a routerLink="/instrumentos" class="form-page__voltar">← Instrumentos</a>
+      <button type="button" class="form-page__logout" (click)="sair()">Sair</button>
+    </div>
+  </header>
+
+  <main class="form-page__content">
+    <span class="eyebrow">Área do Cliente</span>
+    <h1 class="form-page__title">{{ isEdicao() ? 'Editar Instrumento' : 'Novo Instrumento' }}</h1>
+
+    @if (errorMessage()) {
+      <div class="form-page__alert" role="alert">{{ errorMessage() }}</div>
+    }
+
+    <form (ngSubmit)="salvar()" class="inst-form">
+      <!-- Identificação -->
+      <section class="inst-form__section">
+        <h2 class="inst-form__section-title">Identificação</h2>
+        <div class="inst-form__grid inst-form__grid--4">
+          <label class="field">
+            <span>Sequência</span>
+            <input type="text" [ngModel]="form().numeroSequencial" (ngModelChange)="atualizarCampo('numeroSequencial', $event)" name="numeroSequencial" />
+          </label>
+          <label class="field">
+            <span>Identificação (TAG) *</span>
+            <input type="text" [ngModel]="form().identificacao" (ngModelChange)="atualizarCampo('identificacao', $event)" name="identificacao" required />
+          </label>
+          <label class="field">
+            <span>Certificado Atual</span>
+            <input type="text" [ngModel]="form().certificado" (ngModelChange)="atualizarCampo('certificado', $event)" name="certificado" />
+          </label>
+          <label class="field">
+            <span>Status</span>
+            <select [ngModel]="form().statusGeral" (ngModelChange)="atualizarCampo('statusGeral', $event)" name="statusGeral">
+              <option [ngValue]="null">Automático</option>
+              @for (s of statusOptions; track s) {
+                <option [ngValue]="s">{{ s }}</option>
+              }
+            </select>
+          </label>
+        </div>
+        <label class="field field--full">
+          <span>Descrição do Equipamento *</span>
+          <input type="text" [ngModel]="form().descricao" (ngModelChange)="atualizarCampo('descricao', $event)" name="descricao" required />
+        </label>
+      </section>
+
+      <!-- Técnico -->
+      <section class="inst-form__section">
+        <h2 class="inst-form__section-title">Dados Técnicos</h2>
+        <div class="inst-form__grid inst-form__grid--4">
+          <label class="field">
+            <span>Marca</span>
+            <input type="text" [ngModel]="form().marca" (ngModelChange)="atualizarCampo('marca', $event)" name="marca" />
+          </label>
+          <label class="field">
+            <span>Modelo</span>
+            <input type="text" [ngModel]="form().modelo" (ngModelChange)="atualizarCampo('modelo', $event)" name="modelo" />
+          </label>
+          <label class="field">
+            <span>Capacidade</span>
+            <input type="text" [ngModel]="form().capacidade" (ngModelChange)="atualizarCampo('capacidade', $event)" name="capacidade" />
+          </label>
+          <label class="field">
+            <span>Precisão</span>
+            <input type="text" [ngModel]="form().precisao" (ngModelChange)="atualizarCampo('precisao', $event)" name="precisao" />
+          </label>
+        </div>
+      </section>
+
+      <!-- Datas e local -->
+      <section class="inst-form__section">
+        <h2 class="inst-form__section-title">Calibração e Localização</h2>
+        <div class="inst-form__grid inst-form__grid--4">
+          <label class="field">
+            <span>Data Última Calibração</span>
+            <input type="date" [ngModel]="form().dataCertificacao" (ngModelChange)="atualizarCampo('dataCertificacao', $event)" name="dataCertificacao" />
+          </label>
+          <label class="field">
+            <span>Frequência (meses)</span>
+            <input type="number" [ngModel]="form().frequenciaMeses" (ngModelChange)="atualizarCampo('frequenciaMeses', $event)" name="frequenciaMeses" />
+          </label>
+          <label class="field">
+            <span>Setor</span>
+            <select [ngModel]="form().setorId" (ngModelChange)="atualizarCampo('setorId', $event)" name="setorId">
+              <option [ngValue]="null">Selecione</option>
+              @for (s of setores(); track s.id) {
+                <option [ngValue]="s.id">{{ s.nome }}</option>
+              }
+            </select>
+          </label>
+          <label class="field">
+            <span>Local de Uso</span>
+            <select [ngModel]="form().localId" (ngModelChange)="atualizarCampo('localId', $event)" name="localId">
+              <option [ngValue]="null">Selecione</option>
+              @for (l of locais(); track l.id) {
+                <option [ngValue]="l.id">{{ l.nome }}</option>
+              }
+            </select>
+          </label>
+        </div>
+      </section>
+
+      <!-- Lado Passa / Não Passa -->
+      <section class="inst-form__section inst-form__section--split">
+        <div class="inst-form__box inst-form__box--lp">
+          <h3>Lado Passa (LP)</h3>
+          <div class="inst-form__grid inst-form__grid--3">
+            <label class="field">
+              <span>Mínimo</span>
+              <input type="number" step="0.0001" [ngModel]="form().lpMin" (ngModelChange)="atualizarCampo('lpMin', $event)" name="lpMin" />
+            </label>
+            <label class="field">
+              <span>Máximo</span>
+              <input type="number" step="0.0001" [ngModel]="form().lpMax" (ngModelChange)="atualizarCampo('lpMax', $event)" name="lpMax" />
+            </label>
+            <label class="field">
+              <span>Aferido</span>
+              <input type="number" step="0.0001" [ngModel]="form().aferidoLp" (ngModelChange)="atualizarCampo('aferidoLp', $event)" name="aferidoLp" />
+            </label>
+          </div>
+        </div>
+        <div class="inst-form__box inst-form__box--lnp">
+          <h3>Lado Não Passa (LNP)</h3>
+          <div class="inst-form__grid inst-form__grid--3">
+            <label class="field">
+              <span>Mínimo</span>
+              <input type="number" step="0.0001" [ngModel]="form().lnpMin" (ngModelChange)="atualizarCampo('lnpMin', $event)" name="lnpMin" />
+            </label>
+            <label class="field">
+              <span>Máximo</span>
+              <input type="number" step="0.0001" [ngModel]="form().lnpMax" (ngModelChange)="atualizarCampo('lnpMax', $event)" name="lnpMax" />
+            </label>
+            <label class="field">
+              <span>Aferido</span>
+              <input type="number" step="0.0001" [ngModel]="form().aferidoLnp" (ngModelChange)="atualizarCampo('aferidoLnp', $event)" name="aferidoLnp" />
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- Erro / Incerteza -->
+      <section class="inst-form__section">
+        <h2 class="inst-form__section-title">Erro e Incerteza</h2>
+        <div class="inst-form__grid inst-form__grid--3">
+          <label class="field">
+            <span>Erro</span>
+            <input type="number" step="0.0001" [ngModel]="form().erro" (ngModelChange)="atualizarCampo('erro', $event)" name="erro" />
+          </label>
+          <label class="field">
+            <span>Incerteza</span>
+            <input type="number" step="0.0001" [ngModel]="form().incertezaMedicao" (ngModelChange)="atualizarCampo('incertezaMedicao', $event)" name="incertezaMedicao" />
+          </label>
+          <label class="field">
+            <span>Critério de Aceitação</span>
+            <input type="number" step="0.0001" [ngModel]="form().criterioAceitacao" (ngModelChange)="atualizarCampo('criterioAceitacao', $event)" name="criterioAceitacao" />
+          </label>
+        </div>
+      </section>
+
+      <!-- Pontos de calibração -->
+      <section class="inst-form__section">
+        <div class="inst-form__section-header">
+          <h2 class="inst-form__section-title">Pontos de Calibração</h2>
+          <button type="button" class="btn-add" (click)="adicionarPonto()">+ Adicionar Ponto</button>
+        </div>
+        <table class="inst-table">
+          <thead>
+            <tr><th>Ponto Nominal</th><th>Valor Indicado 1</th><th>Valor Indicado 2</th><th></th></tr>
+          </thead>
+          <tbody>
+            @for (p of pontos(); track $index) {
+              <tr>
+                <td><input type="text" [ngModel]="p.pontoNominal" (ngModelChange)="atualizarPonto($index, 'pontoNominal', $event)" name="pontoNominal{{$index}}" /></td>
+                <td><input type="number" step="0.0001" [ngModel]="p.vIndicado1" (ngModelChange)="atualizarPonto($index, 'vIndicado1', $event)" name="vIndicado1{{$index}}" /></td>
+                <td><input type="number" step="0.0001" [ngModel]="p.vIndicado2" (ngModelChange)="atualizarPonto($index, 'vIndicado2', $event)" name="vIndicado2{{$index}}" /></td>
+                <td><button type="button" class="btn-remove" (click)="removerPonto($index)">Remover</button></td>
+              </tr>
+            } @empty {
+              <tr><td colspan="4" class="inst-table__empty">Nenhum ponto adicionado.</td></tr>
+            }
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Histórico retroativo -->
+      <section class="inst-form__section">
+        <div class="inst-form__section-header">
+          <h2 class="inst-form__section-title">Certificados Anteriores</h2>
+          <button type="button" class="btn-add" (click)="adicionarHistorico()">+ Vincular Certificado</button>
+        </div>
+        <table class="inst-table">
+          <thead>
+            <tr><th>Certificado</th><th>Data</th><th></th></tr>
+          </thead>
+          <tbody>
+            @for (h of historicos(); track $index) {
+              <tr>
+                <td><input type="text" [ngModel]="h.certificado" (ngModelChange)="atualizarHistorico($index, 'certificado', $event)" name="histCert{{$index}}" /></td>
+                <td><input type="date" [ngModel]="h.dataCertificacao" (ngModelChange)="atualizarHistorico($index, 'dataCertificacao', $event)" name="histData{{$index}}" /></td>
+                <td><button type="button" class="btn-remove" (click)="removerHistorico($index)">Remover</button></td>
+              </tr>
+            } @empty {
+              <tr><td colspan="3" class="inst-table__empty">Nenhum certificado vinculado.</td></tr>
+            }
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Observações -->
+      <section class="inst-form__section">
+        <label class="field field--full">
+          <span>Observações</span>
+          <textarea rows="3" [ngModel]="form().observacoes" (ngModelChange)="atualizarCampo('observacoes', $event)" name="observacoes"></textarea>
+        </label>
+      </section>
+
+      <div class="inst-form__actions">
+        <a routerLink="/instrumentos" class="btn-cancel">Cancelar</a>
+        <button type="submit" class="btn-save" [disabled]="isSalvando()">
+          {{ isSalvando() ? 'Salvando…' : 'Salvar Instrumento' }}
+        </button>
+      </div>
+    </form>
+  </main>
+</div>

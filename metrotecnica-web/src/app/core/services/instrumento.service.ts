@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { InstrumentoDetalhe, InstrumentoRequest } from '../models/instrumento.model';
 import {
   InstrumentoPageResponse,
   StatsResponse
@@ -33,4 +34,16 @@ export class InstrumentoService {
       params: httpParams
     });
   }
+  obterPorId(id: number): Observable<InstrumentoDetalhe> {
+    return this.http.get<InstrumentoDetalhe>(`${this.apiUrl}/instrumentos/${id}`);
+  }
+
+  criar(dto: InstrumentoRequest): Observable<{ message: string; id: number }> {
+    return this.http.post<{ message: string; id: number }>(`${this.apiUrl}/instrumentos`, dto);
+  }
+
+  atualizar(id: number, dto: InstrumentoRequest): Observable<{ message: string }> {
+    return this.http.put<{ message: string }>(`${this.apiUrl}/instrumentos/${id}`, dto);
+  }
+
 }
