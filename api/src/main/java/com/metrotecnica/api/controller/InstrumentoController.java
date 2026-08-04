@@ -1,5 +1,8 @@
 package com.metrotecnica.api.controller;
 
+import com.metrotecnica.api.model.User;
+import com.metrotecnica.api.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import com.metrotecnica.api.dto.InstrumentoPageResponseDTO;
 import com.metrotecnica.api.dto.InstrumentoRequestDTO;
 import com.metrotecnica.api.dto.StatsResponseDTO;
@@ -19,6 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.security.MessageDigest;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api")
@@ -26,7 +31,7 @@ import java.util.stream.Collectors;
 public class InstrumentoController {
 
     private final InstrumentoService instrumentoService;
-
+    private final UserRepository userRepository;   
     // ==========================================================
     // GET /api/stats
     // ==========================================================
@@ -123,6 +128,9 @@ public class InstrumentoController {
         dados.put("resultadoMafra", inst.getResultadoMafra());
         dados.put("statusGeral", inst.getStatusGeral());
         dados.put("observacoes", inst.getObservacoes());
+        dados.put("documentHash", inst.getDocumentHash());
+        dados.put("metrologistaNome", inst.getMetrologistaNome());
+        dados.put("assinaturaData", inst.getAssinaturaData());
 
         List<Map<String, Object>> pontos = inst.getPontos().stream()
                 .map(this::mapPonto)
@@ -157,4 +165,57 @@ public class InstrumentoController {
         m.put("temPdfFisico", h.getPdfFisico() != null);
         return m;
     }
+
+
+    // ==========================================================
+    // POST /api/instrumentos/{id}/assinar
+    // ==========================================================
+    @PostMapping("/instrumentos/{id}/assinar")
+    public ResponseEntity<?> assinar(
+            @PathVariable Long id,
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            HttpServletRequest request
+    ) {
+        User user = userRepository.findByEmail(userPrincipal.getEmail())
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        if (user.getCanSign() == null || !user.getCanSign()) {
+            return ResponseEntity.status(403).body(Map.of("error", "Permissão negada para assinatura"));
+        }
+
+        Instrumento inst = instrumentoService.buscarPorId(id, userPrincipal.getTenantId());
+
+        inst.setMetrologistaNome(user.getNomeCompleto());
+        inst.setMetrologistaSig(user.getSignatureFile());
+        inst.setMetrologistaData(LocalDateTime.now());
+
+        // Segunda assinatura fixa, replicando a regra de negócio do Flask original
+        inst.setResponsavelNome("José Rubens Cardoso da Costa");
+        inst.setResponsavelSig("jose.png");
+        inst.setResponsavelData(LocalDateTime.now());
+
+        inst.setAssinanteIp(request.getRemoteAddr());
+
+        String lacre = inst.getIdentificacao() + "-" + inst.getCertificado() + "-" + LocalDateTime.now();
+        inst.setDocumentHash(gerarHashSha256(lacre));
+        inst.setAssinaturaData(LocalDateTime.now());
+
+        instrumentoService.salvar(inst);
+
+        return ResponseEntity.ok(Map.of("message", "Certificado assinado com sucesso"));
+    }
+
+    private String gerarHashSha256(String texto) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hashBytes = digest.digest(texto.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashBytes) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao gerar hash do documento", e);
+        }
+    }    
 }

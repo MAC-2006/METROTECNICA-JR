@@ -124,11 +124,32 @@ export class InstrumentoFormComponent {
             dataCertificacao: null
           }))
         );
+        this.assinaturaInfo.set({
+          documentHash: inst.documentHash,
+          metrologistaNome: inst.metrologistaNome
+        });
       },
       error: () => this.errorMessage.set('Não foi possível carregar o instrumento.')
     });
   }
+  protected assinar(): void {
+    const id = this.instrumentoId();
+    if (!id) return;
 
+    this.isAssinando.set(true);
+    this.errorMessage.set(null);
+
+    this.instrumentoService.assinar(id).subscribe({
+      next: () => {
+        this.carregarInstrumento(id);
+        this.isAssinando.set(false);
+      },
+      error: (err) => {
+        this.isAssinando.set(false);
+        this.errorMessage.set(err?.error?.error ?? 'Não foi possível assinar o certificado.');
+      }
+    });
+  }
   protected atualizarCampo<K extends keyof InstrumentoRequest>(campo: K, valor: InstrumentoRequest[K]): void {
     this.form.update((f) => ({ ...f, [campo]: valor }));
   }
@@ -190,7 +211,9 @@ export class InstrumentoFormComponent {
       }
     });
   }
-
+  // junto dos outros signals
+  protected readonly isAssinando = signal(false);
+  protected readonly assinaturaInfo = signal<{ documentHash: string | null; metrologistaNome: string | null } | null>(null);
   protected sair(): void {
     this.auth.logout();
   }

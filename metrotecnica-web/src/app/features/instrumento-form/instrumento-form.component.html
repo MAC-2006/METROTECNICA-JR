@@ -209,7 +209,24 @@
           </tbody>
         </table>
       </section>
-
+      @if (isEdicao()) {
+        <section class="inst-form__section">
+          <h2 class="inst-form__section-title">Assinatura Eletrônica</h2>
+          @if (assinaturaInfo()?.documentHash) {
+            <p style="color: var(--muted); font-size: 0.88rem; margin: 0;">
+              Assinado por <strong>{{ assinaturaInfo()!.metrologistaNome }}</strong>.
+              Hash: <span class="mono">{{ assinaturaInfo()!.documentHash!.substring(0, 16) }}…</span>
+            </p>
+          } @else {
+            <p style="color: var(--muted); font-size: 0.88rem; margin: 0 0 1rem;">
+              Este certificado ainda não foi assinado.
+            </p>
+            <button type="button" class="btn-add" [disabled]="isAssinando()" (click)="assinar()">
+              {{ isAssinando() ? 'Assinando…' : 'Assinar Certificado' }}
+            </button>
+          }
+        </section>
+      }
       <!-- Observações -->
       <section class="inst-form__section">
         <label class="field field--full">

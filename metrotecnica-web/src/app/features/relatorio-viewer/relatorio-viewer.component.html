@@ -1,0 +1,11 @@
+<div class="viewer">
+  <header class="viewer__bar">
+    <span class="viewer__logo">METRO<strong>TÉCNICA</strong></span>
+    <div class="viewer__actions">
+      <a [href]="pdfDownloadUrl" class="viewer__btn viewer__btn--pdf">Baixar PDF</a>
+      <a [href]="excelDownloadUrl" class="viewer__btn viewer__btn--excel">Baixar Excel</a>
+    </div>
+  </header>
+
+  <iframe [src]="pdfUrlSeguro" class="viewer__frame" title="Relatório"></iframe>
+</div>

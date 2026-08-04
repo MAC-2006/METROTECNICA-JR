@@ -66,6 +66,9 @@ export interface InstrumentoDetalhe {
   resultadoMafra: string | null;
   statusGeral: string | null;
   observacoes: string | null;
+  documentHash: string | null;
+  metrologistaNome: string | null;
+  assinaturaData: string | null;
   pontos: PontoCalibracao[];
   historicos: { id: number; data: string; certificado: string; status: string; temPdfFisico: boolean }[];
 }

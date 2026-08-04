@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<style>
+    @page { size: A4 landscape; margin: 1cm; }
+    body { font-family: Arial; font-size: 10px; }
+    .setor-header { background: #333; color: white; padding: 5px; margin-top: 20px; font-size: 12px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }
+</style>
+</head>
+<body>
+    <h2>RELATÓRIO POR SETOR - METROTÉCNICA</h2>
+
+    <th:block th:each="entry : ${instrumentosAgrupados}">
+        <div class="setor-header" th:text="'SETOR: ' + ${entry.key}">SETOR</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>SEQ</th><th>TAG</th><th>DESCRIÇÃO</th><th>LOCAL</th><th>VENCIMENTO</th><th>STATUS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="i : ${entry.value}">
+                    <td th:text="${i.numeroSequencial}">SEQ</td>
+                    <td th:text="${i.identificacao}">TAG</td>
+                    <td th:text="${i.descricao}">Descrição</td>
+                    <td th:text="${i.localUso != null ? i.localUso.nome : '---'}">Local</td>
+                    <td th:text="${i.proxCalibFormatada}">Vencimento</td>
+                    <td th:text="${i.statusGeral}">Status</td>
+                </tr>
+            </tbody>
+        </table>
+    </th:block>
+</body>
+</html>

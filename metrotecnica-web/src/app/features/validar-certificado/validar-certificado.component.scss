@@ -1,0 +1,119 @@
+:host {
+  --ink: #10151c;
+  --paper: #f2efe6;
+  --paper-soft: #e9e5d8;
+  --blueprint: #1e3a5f;
+  --signal: #c8862f;
+  --signal-soft: #e0ab5c;
+  --line: rgba(16, 21, 28, 0.12);
+  --muted: #5b6472;
+  --danger: #b3432f;
+  --verified: #2f7a4d;
+
+  --font-display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --font-body: 'IBM Plex Sans', 'Inter', system-ui, sans-serif;
+
+  display: block;
+  min-height: 100vh;
+  background: var(--paper-soft);
+  font-family: var(--font-body);
+}
+
+.validar__topbar {
+  padding: 1.1rem 1.75rem;
+  background: var(--ink);
+}
+
+.validar__logo {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--paper);
+  letter-spacing: 0.06em;
+
+  strong { color: var(--signal-soft); font-weight: 700; }
+}
+
+.validar__content {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 3.5rem 1.5rem 4rem;
+  display: flex;
+  justify-content: center;
+}
+
+.validar__text {
+  color: var(--muted);
+  text-align: center;
+}
+
+.validar__card {
+  width: 100%;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 2rem 1.75rem;
+  text-align: center;
+
+  &--ok { border-top: 3px solid var(--verified); }
+  &--erro { border-top: 3px solid var(--danger); }
+}
+
+.validar__seal {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(47, 122, 77, 0.1);
+  color: var(--verified);
+
+  svg { width: 26px; height: 26px; }
+
+  &--erro {
+    background: rgba(179, 67, 47, 0.1);
+    color: var(--danger);
+  }
+}
+
+.validar__title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 0.5rem;
+}
+
+.validar__subtitle {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0 0 1.75rem;
+}
+
+.validar__grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.6rem 1rem;
+  text-align: left;
+  margin: 0;
+
+  dt {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  dd {
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--ink);
+  }
+}
+
+.mono { font-family: var(--font-mono); }

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<style>
+    @page { size: landscape; margin: 1cm; }
+    body { font-family: Arial, sans-serif; font-size: 9px; }
+    .header { text-align: center; border-bottom: 2px solid #333; margin-bottom: 10px; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background-color: #eee; border: 1px solid #333; padding: 4px; }
+    td { border: 1px solid #333; padding: 4px; }
+    .status-aprovado { color: #008000; font-weight: bold; }
+    .status-reprovado { color: #FF0000; font-weight: bold; }
+</style>
+</head>
+<body>
+    <div class="header">
+        <h2>METROTÉCNICA - RELATÓRIO DE INSTRUMENTOS</h2>
+        <p>Filtro: <span th:text="${titulo}">GERAL</span> | Data: <span th:text="${dataHoje}">01/01/2026</span></p>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>TAG/ID</th>
+                <th>DESCRIÇÃO</th>
+                <th>SETOR</th>
+                <th>CERTIFICADO</th>
+                <th>PRÓX. CALIBRAÇÃO</th>
+                <th>STATUS</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="i : ${insts}">
+                <td th:text="${i.identificacao}">TAG</td>
+                <td th:text="${i.descricao}">Descrição</td>
+                <td th:text="${i.setor != null ? i.setor.nome : '---'}">Setor</td>
+                <td th:text="${i.certificado}">Certificado</td>
+                <td th:text="${i.dataProximaCalibracao != null ? #temporals.format(i.dataProximaCalibracao, 'dd/MM/yyyy') : '---'}">Data</td>
+                <td th:text="${i.statusGeral}"
+                    th:classappend="${i.statusGeral == 'APROVADO'} ? 'status-aprovado' : (${i.statusGeral != null and i.statusGeral.contains('REPROVADO')} ? 'status-reprovado' : '')">
+                    STATUS
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

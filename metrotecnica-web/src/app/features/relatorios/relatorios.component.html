@@ -1,0 +1,77 @@
+<div class="rel">
+  <header class="rel__topbar">
+    <span class="rel__logo">METRO<strong>TÉCNICA</strong></span>
+    <div class="rel__user">
+      <a routerLink="/dashboard" class="rel__voltar">← Painel</a>
+      <button type="button" class="rel__logout" (click)="sair()">Sair</button>
+    </div>
+  </header>
+
+  <main class="rel__content">
+    <span class="eyebrow">Área do Cliente</span>
+    <h1 class="rel__title">Relatórios</h1>
+    <p class="rel__subtitle">Escolha o tipo de relatório e os filtros. Ele abrirá em uma nova aba com opção de baixar em PDF ou Excel.</p>
+
+    <div class="rel__form">
+      <label class="field">
+        <span>Modelo do relatório</span>
+        <select [ngModel]="tipo()" (ngModelChange)="onTipoChange($event)">
+          @for (t of tipos; track t.valor) {
+            <option [value]="t.valor">{{ t.nome }}</option>
+          }
+        </select>
+      </label>
+
+      @if (precisaDatas()) {
+        <div class="rel__grid">
+          <label class="field">
+            <span>Data inicial</span>
+            <input type="date" [ngModel]="start()" (ngModelChange)="start.set($event)" />
+          </label>
+          <label class="field">
+            <span>Data final</span>
+            <input type="date" [ngModel]="end()" (ngModelChange)="end.set($event)" />
+          </label>
+        </div>
+      }
+
+      @if (precisaSetor()) {
+        <label class="field">
+          <span>Setor</span>
+          <select [ngModel]="valor()" (ngModelChange)="valor.set($event)">
+            <option [ngValue]="null">Selecione</option>
+            @for (s of setores(); track s.id) {
+              <option [value]="s.id">{{ s.nome }}</option>
+            }
+          </select>
+        </label>
+      }
+
+      @if (precisaLocal()) {
+        <label class="field">
+          <span>Local de uso</span>
+          <select [ngModel]="valor()" (ngModelChange)="valor.set($event)">
+            <option [ngValue]="null">Selecione</option>
+            @for (l of locais(); track l.id) {
+              <option [value]="l.id">{{ l.nome }}</option>
+            }
+          </select>
+        </label>
+      }
+
+      @if (precisaSituacao()) {
+        <label class="field">
+          <span>Situação</span>
+          <select [ngModel]="valor()" (ngModelChange)="valor.set($event)">
+            <option [ngValue]="null">Selecione</option>
+            @for (s of situacoes; track s) {
+              <option [value]="s">{{ s }}</option>
+            }
+          </select>
+        </label>
+      }
+
+      <button type="button" class="rel__gerar" (click)="gerar()">Gerar Relatório</button>
+    </div>
+  </main>
+</div>

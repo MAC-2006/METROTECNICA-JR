@@ -45,5 +45,7 @@ export class InstrumentoService {
   atualizar(id: number, dto: InstrumentoRequest): Observable<{ message: string }> {
     return this.http.put<{ message: string }>(`${this.apiUrl}/instrumentos/${id}`, dto);
   }
-
+  assinar(id: number): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/instrumentos/${id}/assinar`, {});
+  }
 }

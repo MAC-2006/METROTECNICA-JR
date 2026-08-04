@@ -11,8 +11,33 @@
   <main class="dashboard__content">
     <span class="eyebrow">Área do Cliente</span>
     <h1 class="dashboard__title">Painel de calibrações</h1>
-    <a routerLink="/instrumentos" class="dashboard__cta">Ver instrumentos →</a>
-    <a routerLink="/auxiliares" class="dashboard__cta">Gerenciar setores e locais →</a>
+
+    <nav class="dashboard__actions">
+      <a routerLink="/instrumentos" class="action-card">
+        <span class="action-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v0M16 4v0"/></svg>
+        </span>
+        <span class="action-card__label">Instrumentos</span>
+        <span class="action-card__desc">Ver, cadastrar e editar</span>
+      </a>
+
+      <a routerLink="/relatorios" class="action-card">
+        <span class="action-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 2v4M16 2v4M3 10h18"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 14h3M8 17h6"/></svg>
+        </span>
+        <span class="action-card__label">Relatórios</span>
+        <span class="action-card__desc">PDF e Excel por filtro</span>
+      </a>
+
+      <a routerLink="/auxiliares" class="action-card">
+        <span class="action-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 0 1-4 0v-.09A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 0 1 0-4h.09A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-1.55V3a2 2 0 0 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9a1.7 1.7 0 0 0 1.55 1H21a2 2 0 0 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1Z"/></svg>
+        </span>
+        <span class="action-card__label">Setores e Locais</span>
+        <span class="action-card__desc">Gerenciar cadastros auxiliares</span>
+      </a>
+    </nav>
+
     @if (isLoading()) {
       <p class="dashboard__text">Carregando estatísticas…</p>
     } @else if (errorMessage()) {

@@ -41,6 +41,21 @@ export const routes: Routes = [
     loadComponent: () => import('./features/auxiliares/auxiliares.component').then((m) => m.AuxiliaresComponent),
     canActivate: [authGuard]
   },
-  
+  {
+  path: 'relatorios',
+  loadComponent: () => import('./features/relatorios/relatorios.component').then((m) => m.RelatoriosComponent),
+  canActivate: [authGuard]
+  },
+  {
+    path: 'relatorios/visualizar',
+    loadComponent: () => import('./features/relatorio-viewer/relatorio-viewer.component').then((m) => m.RelatorioViewerComponent),
+    canActivate: [authGuard]
+  },
+
+  {
+    path: 'validar/:hash',
+    loadComponent: () => import('./features/validar-certificado/validar-certificado.component').then((m) => m.ValidarCertificadoComponent)
+  },  
+    
   { path: '**', redirectTo: '' }
 ];

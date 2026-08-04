@@ -17,6 +17,8 @@ public interface InstrumentoRepository extends JpaRepository<Instrumento, Long> 
 
     Optional<Instrumento> findByIdentificacaoAndTenantId(String identificacao, Long tenantId);
 
+    Optional<Instrumento> findByDocumentHash(String documentHash);
+    
     long countByTenantId(Long tenantId);
 
     long countByTenantIdAndDataProximaCalibracaoLessThan(Long tenantId, LocalDate hoje);
@@ -56,4 +58,7 @@ public interface InstrumentoRepository extends JpaRepository<Instrumento, Long> 
     List<Instrumento> findByTenantIdOrderById(Long tenantId);
 
     List<Instrumento> findByTenantIdOrderBySetorIdAscDescricaoAsc(Long tenantId);
+
+    List<Instrumento> findByTenantIdAndDataCadastroBetween(Long tenantId, LocalDate inicio, LocalDate fim);
+
 }

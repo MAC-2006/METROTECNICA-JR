@@ -234,3 +234,42 @@
     &:disabled { opacity: 0.4; cursor: not-allowed; }
   }
 }
+
+.lista__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.lista__title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0; // sem o margin-bottom antigo, já que agora fica dentro do header
+}
+
+.lista__novo {
+  background: var(--signal);
+  color: #1a1000;
+  text-decoration: none;
+  padding: 0.65rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+
+  &:hover { background: var(--signal-soft); }
+}
+
+.link-editar {
+  color: var(--blueprint);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.8rem;
+  &:hover { text-decoration: underline; }
+}

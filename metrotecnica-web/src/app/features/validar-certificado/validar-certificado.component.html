@@ -1,0 +1,38 @@
+<div class="validar">
+  <header class="validar__topbar">
+    <span class="validar__logo">METRO<strong>TÉCNICA</strong></span>
+  </header>
+
+  <main class="validar__content">
+    @if (isLoading()) {
+      <p class="validar__text">Verificando certificado…</p>
+    } @else if (resultado()?.valido) {
+      <div class="validar__card validar__card--ok">
+        <div class="validar__seal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 12 5 5 9-10"/></svg>
+        </div>
+        <h1 class="validar__title">Certificado Válido</h1>
+        <p class="validar__subtitle">Documento autêntico emitido pela Metrotécnica.</p>
+
+        <dl class="validar__grid">
+          <dt>Instrumento</dt><dd>{{ resultado()!.descricao }}</dd>
+          <dt>TAG</dt><dd class="mono">{{ resultado()!.identificacao }}</dd>
+          <dt>Cliente</dt><dd>{{ resultado()!.tenantNome }}</dd>
+          <dt>Data de calibração</dt><dd>{{ resultado()!.dataCertificacao | date: 'dd/MM/yyyy' }}</dd>
+          <dt>Próxima calibração</dt><dd>{{ resultado()!.proxCalibFormatada }}</dd>
+          <dt>Status</dt><dd>{{ resultado()!.statusGeral }}</dd>
+          <dt>Metrologista</dt><dd>{{ resultado()!.metrologistaNome ?? 'Aguardando assinatura' }}</dd>
+          <dt>Hash</dt><dd class="mono">{{ resultado()!.documentHashParcial }}…</dd>
+        </dl>
+      </div>
+    } @else {
+      <div class="validar__card validar__card--erro">
+        <div class="validar__seal validar__seal--erro">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </div>
+        <h1 class="validar__title">Certificado Não Encontrado</h1>
+        <p class="validar__subtitle">Não foi possível validar este documento. Verifique o link ou entre em contato com a Metrotécnica.</p>
+      </div>
+    }
+  </main>
+</div>

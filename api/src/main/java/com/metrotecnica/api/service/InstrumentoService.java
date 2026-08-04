@@ -278,4 +278,8 @@ public class InstrumentoService {
     private String upper(String s) {
         return s != null ? s.trim().toUpperCase() : null;
     }
+
+    public Instrumento salvar(Instrumento inst) {
+        return instrumentoRepository.save(inst);
+    }    
 }
