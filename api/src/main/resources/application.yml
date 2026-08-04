@@ -21,6 +21,14 @@ spring:
     enabled: true
     locations: classpath:db/migration
 
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
+app:
+  storage:
+    padroes-path: D:/Metrotecnica_Java/storage/padroes
+
 logging:
   level:
     org.springframework.security: DEBUG

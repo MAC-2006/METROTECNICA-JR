@@ -41,6 +41,11 @@ public class InstrumentoService {
                         inst.getDataCertificacao().plusMonths(inst.getFrequenciaMeses())
                 );
             }
+        }
+
+        // Formata sempre que houver uma data (calculada OU importada direto do DBF),
+        // independentemente de dataCertificacao estar presente.
+        if (inst.getDataProximaCalibracao() != null) {
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MM / yyyy", new Locale("pt", "BR"));
             inst.setProxCalibFormatada(inst.getDataProximaCalibracao().format(fmt));
         }

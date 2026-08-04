@@ -1,0 +1,95 @@
+<div class="migracao">
+  <header class="migracao__topbar">
+    <span class="migracao__logo">METRO<strong>TÉCNICA</strong></span>
+    <div class="migracao__user">
+      <a routerLink="/admin-dashboard" class="migracao__voltar">← Empresas</a>
+      <button type="button" class="migracao__logout" (click)="sair()">Sair</button>
+    </div>
+  </header>
+
+  <main class="migracao__content">
+    <span class="eyebrow">Painel Global</span>
+    <h1 class="migracao__title">Migração de Sistema Legado (FoxPro)</h1>
+    <p class="migracao__subtitle">
+      Envie o ZIP com o arquivo <code>instrumentos.dbf</code> exportado do sistema antigo.
+      O sistema cria (ou reaproveita) a empresa e importa instrumentos, setores, locais de
+      uso e o histórico de certificados anteriores.
+    </p>
+
+    @if (errorMessage()) {
+      <div class="migracao__alert" role="alert">{{ errorMessage() }}</div>
+    }
+
+    @if (!resultado()) {
+      <div class="migracao__card">
+        <label class="field field--full">
+          <span>Nome da Empresa *</span>
+          <input
+            type="text"
+            placeholder="Ex: Metalúrgica Silva"
+            [ngModel]="nomeEmpresa()"
+            (ngModelChange)="nomeEmpresa.set($event)"
+            [disabled]="enviando()"
+          />
+        </label>
+        <p class="migracao__hint">* O site e o slug são gerados automaticamente a partir do nome.</p>
+
+        <input
+          type="file"
+          id="zipFile"
+          accept=".zip"
+          class="migracao__input-file"
+          (change)="onArquivoSelecionado($event)"
+          [disabled]="enviando()"
+        >
+        <label
+          for="zipFile"
+          class="migracao__upload-zone"
+          [class.migracao__upload-zone--disabled]="enviando()"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="migracao__upload-icon">
+            <path d="M12 3v12M6 9l6-6 6 6"/>
+            <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
+          </svg>
+          <span>{{ enviando() ? 'Enviando…' : 'Selecionar arquivo .ZIP' }}</span>
+        </label>
+
+        @if (enviando()) {
+          <div class="migracao__progress">
+            <div class="migracao__progress-bar" [style.width.%]="progresso()"></div>
+          </div>
+          <p class="migracao__progress-label">{{ progresso() }}% — processando no servidor…</p>
+        }
+      </div>
+    } @else {
+      <div class="migracao__card migracao__card--sucesso">
+        <div class="migracao__seal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 12 5 5 9-10"/></svg>
+        </div>
+        <h2 class="migracao__result-title">Migração concluída</h2>
+        <p class="migracao__result-text">
+          <strong>{{ resultado()!.count }}</strong> instrumento(s) importado(s) para
+          <strong>{{ resultado()!.name }}</strong> (<span class="mono">{{ resultado()!.slug }}</span>).
+        </p>
+
+        @if (resultado()!.warnings.length > 0) {
+          <div class="migracao__warnings">
+            <h3>Avisos ({{ resultado()!.warnings.length }})</h3>
+            <ul>
+              @for (w of resultado()!.warnings; track w) {
+                <li>{{ w }}</li>
+              }
+            </ul>
+          </div>
+        }
+
+        <div class="migracao__result-actions">
+          <a [routerLink]="['/admin/tenants', resultado()!.tenantId, 'editar']" class="btn-save">
+            Completar Dados Jurídicos
+          </a>
+          <button type="button" class="btn-cancel" (click)="reiniciar()">Nova Migração</button>
+        </div>
+      </div>
+    }
+  </main>
+</div>

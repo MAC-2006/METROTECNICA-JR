@@ -3,7 +3,18 @@ import { HomeComponent } from './features/home/home.component';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
 import { adminGuard } from './core/guards/admin.guard';
+import { RenderMode, ServerRoute } from '@angular/ssr';
 
+export const serverRoutes: ServerRoute[] = [
+  {
+    path: 'relatorios/visualizar',
+    renderMode: RenderMode.Client
+  },
+  {
+    path: '**',
+    renderMode: RenderMode.Prerender
+  }
+];
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   {
@@ -56,6 +67,27 @@ export const routes: Routes = [
     path: 'validar/:hash',
     loadComponent: () => import('./features/validar-certificado/validar-certificado.component').then((m) => m.ValidarCertificadoComponent)
   },  
-    
+  {
+    path: 'admin/tenants/novo',
+    loadComponent: () => import('./features/tenant-form/tenant-form.component').then((m) => m.TenantFormComponent),
+    canActivate: [adminGuard]
+  },
+  {
+    path: 'admin/tenants/:id/editar',
+    loadComponent: () => import('./features/tenant-form/tenant-form.component').then((m) => m.TenantFormComponent),
+    canActivate: [adminGuard]
+  },
+
+  {
+  path: 'admin/migracao',
+  loadComponent: () => import('./features/migracao/migracao.component').then((m) => m.MigracaoComponent),
+  canActivate: [adminGuard]
+  },
+
+ {
+  path: 'padroes',
+  loadComponent: () => import('./features/padroes/padroes.component').then((m) => m.PadroesComponent),
+  canActivate: [authGuard]
+  }, 
   { path: '**', redirectTo: '' }
 ];

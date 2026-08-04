@@ -1,0 +1,111 @@
+<div class="form-page">
+  <header class="form-page__topbar">
+    <span class="form-page__logo">METRO<strong>TÉCNICA</strong></span>
+    <div class="form-page__user">
+      <a routerLink="/admin-dashboard" class="form-page__voltar">← Empresas</a>
+      <button type="button" class="form-page__logout" (click)="sair()">Sair</button>
+    </div>
+  </header>
+
+  <main class="form-page__content">
+    <span class="eyebrow">Painel Global</span>
+    <h1 class="form-page__title">{{ isEdicao() ? 'Editar Empresa' : 'Nova Empresa' }}</h1>
+
+    @if (errorMessage()) {
+      <div class="form-page__alert" role="alert">{{ errorMessage() }}</div>
+    }
+
+    @if (isCarregando()) {
+      <p class="form-page__text">Carregando dados da empresa…</p>
+    } @else {
+      <form (ngSubmit)="salvar()" class="tenant-form">
+        <section class="tenant-form__section">
+          <h2 class="tenant-form__section-title">Identificação</h2>
+          <div class="tenant-form__grid tenant-form__grid--2">
+            <label class="field">
+              <span>Nome Fantasia *</span>
+              <input type="text" [ngModel]="form().name" (ngModelChange)="onNomeChange($event)" name="name" required />
+            </label>
+            <label class="field">
+              <span>Slug (URL) *</span>
+              <input type="text" [ngModel]="form().slug" (ngModelChange)="atualizarCampo('slug', $event)" name="slug" required />
+            </label>
+          </div>
+          <label class="field field--full">
+            <span>Razão Social</span>
+            <input type="text" [ngModel]="form().razaoSocial" (ngModelChange)="atualizarCampo('razaoSocial', $event)" name="razaoSocial" />
+          </label>
+          <div class="tenant-form__grid tenant-form__grid--2">
+            <label class="field">
+              <span>CNPJ</span>
+              <input type="text" [ngModel]="form().cnpj" (ngModelChange)="atualizarCampo('cnpj', $event)" name="cnpj" placeholder="00.000.000/0000-00" />
+              @if (buscandoCnpj()) {
+                <small class="field__hint">Buscando dados do CNPJ…</small>
+              }
+              @if (cnpjNaoEncontrado()) {
+                <small class="field__hint field__hint--erro">CNPJ não encontrado — preencha manualmente.</small>
+              }
+            </label>
+            <label class="field">
+              <span>Telefone</span>
+              <input type="text" [ngModel]="form().telefone" (ngModelChange)="atualizarCampo('telefone', $event)" name="telefone" placeholder="(11) 99999-9999" />
+            </label>
+          </div>
+        </section>
+
+        <section class="tenant-form__section">
+          <h2 class="tenant-form__section-title">Endereço</h2>
+          <div class="tenant-form__grid tenant-form__grid--3">
+            <label class="field">
+              <span>CEP</span>
+              <input type="text" [ngModel]="form().cep" (ngModelChange)="atualizarCampo('cep', $event)" name="cep" placeholder="00000-000" />
+              @if (buscandoCep()) {
+                <small class="field__hint">Buscando endereço…</small>
+              }
+              @if (cepNaoEncontrado()) {
+                <small class="field__hint field__hint--erro">CEP não encontrado.</small>
+              }
+            </label>
+            <label class="field" style="grid-column: span 2;">
+              <span>Logradouro</span>
+              <input type="text" [ngModel]="form().logradouro" (ngModelChange)="atualizarCampo('logradouro', $event)" name="logradouro" />
+            </label>
+          </div>
+          <div class="tenant-form__grid tenant-form__grid--4">
+            <label class="field">
+              <span>Número</span>
+              <input type="text" [ngModel]="form().numero" (ngModelChange)="atualizarCampo('numero', $event)" name="numero" />
+            </label>
+            <label class="field">
+              <span>Bairro</span>
+              <input type="text" [ngModel]="form().bairro" (ngModelChange)="atualizarCampo('bairro', $event)" name="bairro" />
+            </label>
+            <label class="field">
+              <span>Cidade</span>
+              <input type="text" [ngModel]="form().cidade" (ngModelChange)="atualizarCampo('cidade', $event)" name="cidade" />
+            </label>
+            <label class="field">
+              <span>UF</span>
+              <input type="text" maxlength="2" [ngModel]="form().estado" (ngModelChange)="atualizarCampo('estado', $event)" name="estado" placeholder="SP" />
+            </label>
+          </div>
+        </section>
+
+        <section class="tenant-form__section">
+          <h2 class="tenant-form__section-title">Outros</h2>
+          <label class="field field--full">
+            <span>URL personalizada (opcional)</span>
+            <input type="text" [ngModel]="form().url" (ngModelChange)="atualizarCampo('url', $event)" name="url" placeholder="http://slug.metrotecnica.com.br" />
+          </label>
+        </section>
+
+        <div class="tenant-form__actions">
+          <a routerLink="/admin-dashboard" class="btn-cancel">Cancelar</a>
+          <button type="submit" class="btn-save" [disabled]="isSalvando()">
+            {{ isSalvando() ? 'Salvando…' : (isEdicao() ? 'Salvar Alterações' : 'Criar Empresa') }}
+          </button>
+        </div>
+      </form>
+    }
+  </main>
+</div>

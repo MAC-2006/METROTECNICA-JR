@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { TenantService } from '../../core/services/tenant.service';
 import { Tenant } from '../../core/models/tenant.model';
@@ -7,6 +7,7 @@ import { Tenant } from '../../core/models/tenant.model';
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
+  imports: [RouterLink],
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.scss'
 })
@@ -44,7 +45,7 @@ export class AdminDashboardComponent {
 
     this.tenantService.impersonar(tenant.id).subscribe({
       next: (res) => {
-        this.auth.aplicarToken(res.accessToken, res.role, this.auth.email() ?? '');
+        this.auth.aplicarToken(res.accessToken, res.role, this.auth.email() ?? '', true);
         this.router.navigateByUrl('/dashboard');
       },
       error: (err) => {

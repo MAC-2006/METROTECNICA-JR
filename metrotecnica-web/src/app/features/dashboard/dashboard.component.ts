@@ -42,4 +42,5 @@ export class DashboardComponent {
   protected sair(): void {
     this.auth.logout();
   }
+  
 }

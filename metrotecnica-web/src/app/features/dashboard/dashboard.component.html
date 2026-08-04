@@ -5,6 +5,11 @@
       <span class="dashboard__role">{{ auth.role() }}</span>
       <span class="dashboard__email">{{ auth.email() }}</span>
       <button type="button" class="dashboard__logout" (click)="sair()">Sair</button>
+        @if (auth.temSessaoAdminSalva()) {
+      <button type="button" class="dashboard__voltar-admin" (click)="auth.voltarParaAdmin()">
+        ← Voltar ao Painel Admin
+      </button>
+  }
     </div>
   </header>
 

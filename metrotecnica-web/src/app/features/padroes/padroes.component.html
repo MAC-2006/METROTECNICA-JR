@@ -1,0 +1,59 @@
+<div class="padroes">
+  <header class="padroes__topbar">
+    <span class="padroes__logo">METRO<strong>TÉCNICA</strong></span>
+    <div class="padroes__user">
+      <a routerLink="/dashboard" class="padroes__voltar">← Painel</a>
+      <button type="button" class="padroes__logout" (click)="sair()">Sair</button>
+    </div>
+  </header>
+
+  <main class="padroes__content">
+    <span class="eyebrow">Área do Cliente</span>
+    <h1 class="padroes__title">Cópia dos Padrões</h1>
+    <p class="padroes__subtitle">Certificados dos padrões metrológicos utilizados nas calibrações, disponíveis para consulta.</p>
+
+    @if (isAdmin) {
+      <div class="padroes__admin-box">
+        <h2>Importar novos padrões (ZIP com PDFs)</h2>
+        <input type="file" accept=".zip" (change)="onArquivoSelecionado($event)" [disabled]="enviando()" />
+
+        @if (enviando()) {
+          <div class="padroes__progress">
+            <div class="padroes__progress-bar" [style.width.%]="progresso()"></div>
+          </div>
+          <span class="padroes__progress-label">{{ progresso() < 100 ? progresso() + '%' : 'Processando…' }}</span>
+        }
+
+        @if (mensagemUpload()) {
+          <div class="padroes__success">{{ mensagemUpload() }}</div>
+        }
+        @if (erroUpload()) {
+          <div class="padroes__error">{{ erroUpload() }}</div>
+        }
+      </div>
+    }
+
+    <input
+      type="text"
+      class="padroes__search"
+      placeholder="Buscar por nome do padrão…"
+      [value]="busca()"
+      (input)="pesquisar($any($event.target).value)"
+    />
+
+    @if (isLoading()) {
+      <p class="padroes__empty">Carregando…</p>
+    } @else {
+      <ul class="padroes__list">
+        @for (arq of arquivos(); track arq) {
+          <li>
+            <span class="padroes__nome">{{ arq }}</span>
+            <button type="button" class="padroes__abrir" (click)="abrir(arq)">Abrir PDF</button>
+          </li>
+        } @empty {
+          <li class="padroes__empty">Nenhum padrão encontrado.</li>
+        }
+      </ul>
+    }
+  </main>
+</div>

@@ -19,7 +19,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/tenants")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('ADMIN') and authentication.principal.tenantId == null")
 public class TenantController {
 
     private final TenantRepository tenantRepository;

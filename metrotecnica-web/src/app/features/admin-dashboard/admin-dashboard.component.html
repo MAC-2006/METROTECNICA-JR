@@ -9,14 +9,26 @@
   </header>
 
   <main class="admin__content">
-    <span class="eyebrow">Painel Global</span>
-    <h1 class="admin__title">Empresas cadastradas</h1>
-    <p class="admin__subtitle">Acesse o painel de uma empresa específica para gerenciar seus instrumentos.</p>
+    <!-- Cabeçalho unificado com títulos e botões de ação -->
+    <div class="admin__header">
+      <div>
+        <span class="eyebrow">Painel Global</span>
+        <h1 class="admin__title">Empresas cadastradas</h1>
+        <p class="admin__subtitle">Acesse o painel de uma empresa específica para gerenciar seus instrumentos.</p>
+      </div>
 
+      <div class="admin__actions" style="display: flex; gap: 0.75rem; align-items: center;">
+        <a routerLink="/admin/migracao" class="admin__nova" style="background: var(--blueprint); color: #fff;">↑ Migrar FoxPro</a>
+        <a routerLink="/admin/tenants/novo" class="admin__nova">+ Nova Empresa</a>
+      </div>
+    </div>
+
+    <!-- Mensagem de erro -->
     @if (errorMessage()) {
       <div class="admin__alert" role="alert">{{ errorMessage() }}</div>
     }
-
+    <a routerLink="/padroes" class="dashboard__cta">Cópia dos Padrões →</a>
+    <!-- Lista / Estado de carregamento -->
     @if (isLoading()) {
       <p class="admin__text">Carregando empresas…</p>
     } @else if (tenants().length === 0) {
@@ -29,14 +41,17 @@
               <span class="tenant-card__name">{{ tenant.name }}</span>
               <span class="tenant-card__slug">{{ tenant.slug }}</span>
             </div>
-            <button
-              type="button"
-              class="tenant-card__btn"
-              [disabled]="impersonandoId() === tenant.id"
-              (click)="acessarEmpresa(tenant)"
-            >
-              {{ impersonandoId() === tenant.id ? 'Acessando…' : 'Acessar' }}
-            </button>
+            <div class="tenant-card__actions">
+              <a [routerLink]="['/admin/tenants', tenant.id, 'editar']" class="tenant-card__edit">Editar</a>
+              <button
+                type="button"
+                class="tenant-card__btn"
+                [disabled]="impersonandoId() === tenant.id"
+                (click)="acessarEmpresa(tenant)"
+              >
+                {{ impersonandoId() === tenant.id ? 'Acessando…' : 'Acessar' }}
+              </button>
+            </div>
           </div>
         }
       </div>

@@ -85,7 +85,12 @@ export class InstrumentoFormComponent {
       historicosRetroativos: []
     };
   }
-
+  private paraIso(dataBr: string | null): string | null {
+    if (!dataBr || dataBr === '---') return null;
+    const [dia, mes, ano] = dataBr.split('/');
+    if (!dia || !mes || !ano) return null;
+    return `${ano}-${mes}-${dia}`;
+  }
   private carregarInstrumento(id: number): void {
     this.instrumentoService.obterPorId(id).subscribe({
       next: (inst) => {
@@ -121,7 +126,7 @@ export class InstrumentoFormComponent {
           (inst.historicos ?? []).map((h) => ({
             id: h.id,
             certificado: h.certificado,
-            dataCertificacao: null
+            dataCertificacao: this.paraIso(h.data)
           }))
         );
         this.assinaturaInfo.set({

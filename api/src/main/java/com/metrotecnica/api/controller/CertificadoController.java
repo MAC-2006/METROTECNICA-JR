@@ -24,6 +24,10 @@ public class CertificadoController {
             @AuthenticationPrincipal UserPrincipal user,
             HttpServletRequest request
     ) {
+        if (user == null) {
+            return ResponseEntity.status(401).build();
+        }
+
         String baseUrl = request.getRequestURL().toString().replaceAll("/api/.*", "");
         byte[] pdf = certificadoService.gerarPdf(id, user.getTenantId(), baseUrl);
 

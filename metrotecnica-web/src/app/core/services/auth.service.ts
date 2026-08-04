@@ -18,7 +18,7 @@ interface JwtPayload {
 }
 
 const TOKEN_KEY = 'metrotecnica_token';
-
+const ADMIN_TOKEN_KEY = 'metrotecnica_admin_token';
 /**
  * Guarda a sessão do usuário (token JWT) e expõe o estado de autenticação
  * como signals, prontos pra usar direto no template.
@@ -49,7 +49,19 @@ export class AuthService {
   }
 
   /** Aplica um novo token sem passar pelo endpoint de login — usado no impersonate. */
-  aplicarToken(token: string, roleFallback: string, emailFallback: string): void {
+  readonly temSessaoAdminSalva = signal<boolean>(!!this.storage()?.getItem(ADMIN_TOKEN_KEY));
+
+  // Troque o método aplicarToken por esta versão com o parâmetro novo:
+  aplicarToken(token: string, roleFallback: string, emailFallback: string, salvarComoAdmin = false): void {
+    if (salvarComoAdmin) {
+      // Guarda o token atual (do superadmin) ANTES de sobrescrever
+      const tokenAtual = this.storage()?.getItem(TOKEN_KEY);
+      if (tokenAtual) {
+        this.storage()?.setItem(ADMIN_TOKEN_KEY, tokenAtual);
+        this.temSessaoAdminSalva.set(true);
+      }
+    }
+
     this.storage()?.setItem(TOKEN_KEY, token);
     const payload = this.readPayload();
     this.isAuthenticated.set(true);
@@ -58,15 +70,35 @@ export class AuthService {
     this.tenantId.set(payload?.tenant_id ?? null);
   }
 
+  // NOVO método — restaura a sessão do superadmin
+  voltarParaAdmin(): void {
+    const adminToken = this.storage()?.getItem(ADMIN_TOKEN_KEY);
+    if (!adminToken) return;
+
+    this.storage()?.setItem(TOKEN_KEY, adminToken);
+    this.storage()?.removeItem(ADMIN_TOKEN_KEY);
+    this.temSessaoAdminSalva.set(false);
+
+    const payload = this.readPayload();
+    this.isAuthenticated.set(true);
+    this.role.set(payload?.role ?? 'admin');
+    this.email.set(payload?.sub ?? null);
+    this.tenantId.set(payload?.tenant_id ?? null);
+
+    this.router.navigateByUrl('/admin-dashboard');
+  }
+
+  // No logout(), adicione a limpeza da chave nova:
   logout(): void {
     this.storage()?.removeItem(TOKEN_KEY);
+    this.storage()?.removeItem(ADMIN_TOKEN_KEY); // NOVO
+    this.temSessaoAdminSalva.set(false); // NOVO
     this.isAuthenticated.set(false);
     this.role.set(null);
     this.email.set(null);
     this.tenantId.set(null);
     this.router.navigateByUrl('/login');
   }
-
   getToken(): string | null {
     return this.storage()?.getItem(TOKEN_KEY) ?? null;
   }
