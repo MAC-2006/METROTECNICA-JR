@@ -1,0 +1,135 @@
+<div class="form-page">
+  <header class="form-page__topbar">
+    <span class="form-page__logo">METRO<strong>TÉCNICA</strong></span>
+    <div class="form-page__user">
+      <a routerLink="/admin-dashboard" class="form-page__voltar">← Empresas</a>
+      <button type="button" class="form-page__logout" (click)="sair()">Sair</button>
+    </div>
+  </header>
+
+  <main class="form-page__content">
+    <span class="eyebrow">Painel Global</span>
+    <h1 class="form-page__title">
+      Usuários {{ tenantNome() ? '— ' + tenantNome() : '' }}
+    </h1>
+
+    @if (errorMessage()) {
+      <div class="form-page__alert" role="alert">{{ errorMessage() }}</div>
+    }
+    @if (successMessage()) {
+      <div class="form-page__alert form-page__alert--sucesso" role="status">{{ successMessage() }}</div>
+    }
+
+    <!-- Lista de usuários já cadastrados -->
+    <section class="tenant-form__section">
+      <h2 class="tenant-form__section-title">Usuários cadastrados</h2>
+
+      @if (isLoading()) {
+        <p class="form-page__text">Carregando usuários…</p>
+      } @else if (usuarios().length === 0) {
+        <p class="form-page__text">Nenhum usuário cadastrado para esta empresa ainda.</p>
+      } @else {
+        <div class="usuarios-list">
+          @for (usuario of usuarios(); track usuario.id) {
+            <div class="usuario-card">
+              <div class="usuario-card__info">
+                <span class="usuario-card__nome">{{ usuario.nomeCompleto || usuario.email }}</span>
+                <span class="usuario-card__email">{{ usuario.email }}</span>
+                <div class="usuario-card__tags">
+                  <span class="tag" [class.tag--admin]="usuario.role === 'admin'">{{ usuario.role === 'admin' ? 'Administrador' : 'Usuário' }}</span>
+                  @if (usuario.canSign) {
+                    <span class="tag tag--assina">Pode assinar</span>
+                  }
+                </div>
+              </div>
+              <div class="usuario-card__actions">
+                <button type="button" class="usuario-card__edit" (click)="editar(usuario)">Editar</button>
+                <button
+                  type="button"
+                  class="usuario-card__excluir"
+                  [disabled]="excluindoId() === usuario.id"
+                  (click)="excluir(usuario)"
+                >
+                  {{ excluindoId() === usuario.id ? 'Removendo…' : 'Remover' }}
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </section>
+
+    <!-- Formulário de criação / edição -->
+    <form (ngSubmit)="salvar()" class="tenant-form">
+      <section class="tenant-form__section">
+        <h2 class="tenant-form__section-title">
+          {{ editandoId() === null ? 'Novo usuário' : 'Editar usuário' }}
+        </h2>
+
+        <div class="tenant-form__grid tenant-form__grid--2">
+          <label class="field">
+            <span>E-mail {{ editandoId() === null ? '*' : '' }}</span>
+            <input
+              type="email"
+              [ngModel]="form().email"
+              (ngModelChange)="atualizarCampo('email', $event)"
+              name="email"
+              [disabled]="editandoId() !== null"
+              placeholder="usuario@empresa.com.br"
+              [required]="editandoId() === null"
+            />
+          </label>
+          <label class="field">
+            <span>Nome completo</span>
+            <input
+              type="text"
+              [ngModel]="form().nomeCompleto"
+              (ngModelChange)="atualizarCampo('nomeCompleto', $event)"
+              name="nomeCompleto"
+            />
+          </label>
+        </div>
+
+        <div class="tenant-form__grid tenant-form__grid--2">
+          <label class="field">
+            <span>{{ editandoId() === null ? 'Senha *' : 'Nova senha (opcional)' }}</span>
+            <input
+              type="password"
+              [ngModel]="form().password"
+              (ngModelChange)="atualizarCampo('password', $event)"
+              name="password"
+              placeholder="Mínimo 6 caracteres"
+              [required]="editandoId() === null"
+            />
+          </label>
+          <label class="field">
+            <span>Perfil</span>
+            <select [ngModel]="form().role" (ngModelChange)="atualizarCampo('role', $event)" name="role">
+              <option value="user">Usuário</option>
+              <option value="admin">Administrador da empresa</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="field field--checkbox">
+          <input
+            type="checkbox"
+            [ngModel]="form().canSign"
+            (ngModelChange)="atualizarCampo('canSign', $event)"
+            name="canSign"
+          />
+          <span>Pode assinar certificados</span>
+        </label>
+      </section>
+
+      <div class="tenant-form__actions">
+        @if (editandoId() !== null) {
+          <button type="button" class="btn-cancel" (click)="cancelarEdicao()">Cancelar edição</button>
+        }
+        <button type="submit" class="btn-save" [disabled]="isSalvando()">
+          {{ isSalvando() ? 'Salvando…' : (editandoId() === null ? 'Criar usuário' : 'Salvar alterações') }}
+        </button>
+      </div>
+    </form>
+  </main>
+</div>

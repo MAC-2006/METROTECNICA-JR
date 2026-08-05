@@ -3,6 +3,7 @@ import { HomeComponent } from './features/home/home.component';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
 import { adminGuard } from './core/guards/admin.guard';
+import { adminWriteGuard } from './core/guards/admin-write.guard';
 import { RenderMode, ServerRoute } from '@angular/ssr';
 
 export const serverRoutes: ServerRoute[] = [
@@ -30,12 +31,12 @@ export const routes: Routes = [
   {
   path: 'instrumentos/novo',
   loadComponent: () => import('./features/instrumento-form/instrumento-form.component').then((m) => m.InstrumentoFormComponent),
-  canActivate: [authGuard]
+  canActivate: [authGuard, adminWriteGuard]
   },
   {
     path: 'instrumentos/:id/editar',
     loadComponent: () => import('./features/instrumento-form/instrumento-form.component').then((m) => m.InstrumentoFormComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard, adminWriteGuard]
   },
   {
     path: 'instrumentos',
@@ -75,6 +76,11 @@ export const routes: Routes = [
   {
     path: 'admin/tenants/:id/editar',
     loadComponent: () => import('./features/tenant-form/tenant-form.component').then((m) => m.TenantFormComponent),
+    canActivate: [adminGuard]
+  },
+  {
+    path: 'admin/tenants/:tenantId/usuarios',
+    loadComponent: () => import('./features/usuarios/usuarios.component').then((m) => m.UsuariosComponent),
     canActivate: [adminGuard]
   },
 

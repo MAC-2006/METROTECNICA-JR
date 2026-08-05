@@ -18,21 +18,25 @@
     <div class="aux__grid">
       <section class="aux__col">
         <h2 class="aux__col-title">Setores</h2>
-        <div class="aux__form">
-          <input
-            type="text"
-            placeholder="Novo setor…"
-            [ngModel]="novoSetor()"
-            (ngModelChange)="novoSetor.set($event)"
-            (keyup.enter)="adicionar('setores')"
-          />
-          <button type="button" (click)="adicionar('setores')">Adicionar</button>
-        </div>
+        @if (auth.isAdmin()) {
+          <div class="aux__form">
+            <input
+              type="text"
+              placeholder="Novo setor…"
+              [ngModel]="novoSetor()"
+              (ngModelChange)="novoSetor.set($event)"
+              (keyup.enter)="adicionar('setores')"
+            />
+            <button type="button" (click)="adicionar('setores')">Adicionar</button>
+          </div>
+        }
         <ul class="aux__list">
           @for (s of setores(); track s.id) {
             <li>
               <span>{{ s.nome }}</span>
-              <button type="button" class="aux__remove" (click)="remover('setores', s)">Remover</button>
+              @if (auth.isAdmin()) {
+                <button type="button" class="aux__remove" (click)="remover('setores', s)">Remover</button>
+              }
             </li>
           } @empty {
             <li class="aux__empty">Nenhum setor cadastrado.</li>
@@ -42,21 +46,25 @@
 
       <section class="aux__col">
         <h2 class="aux__col-title">Locais de Uso</h2>
-        <div class="aux__form">
-          <input
-            type="text"
-            placeholder="Novo local…"
-            [ngModel]="novoLocal()"
-            (ngModelChange)="novoLocal.set($event)"
-            (keyup.enter)="adicionar('locais-uso')"
-          />
-          <button type="button" (click)="adicionar('locais-uso')">Adicionar</button>
-        </div>
+        @if (auth.isAdmin()) {
+          <div class="aux__form">
+            <input
+              type="text"
+              placeholder="Novo local…"
+              [ngModel]="novoLocal()"
+              (ngModelChange)="novoLocal.set($event)"
+              (keyup.enter)="adicionar('locais-uso')"
+            />
+            <button type="button" (click)="adicionar('locais-uso')">Adicionar</button>
+          </div>
+        }
         <ul class="aux__list">
           @for (l of locais(); track l.id) {
             <li>
               <span>{{ l.nome }}</span>
-              <button type="button" class="aux__remove" (click)="remover('locais-uso', l)">Remover</button>
+              @if (auth.isAdmin()) {
+                <button type="button" class="aux__remove" (click)="remover('locais-uso', l)">Remover</button>
+              }
             </li>
           } @empty {
             <li class="aux__empty">Nenhum local cadastrado.</li>

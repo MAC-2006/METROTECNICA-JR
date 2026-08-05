@@ -22,7 +22,7 @@
         <a routerLink="/admin/tenants/novo" class="admin__nova">+ Nova Empresa</a>
       </div>
     </div>
-
+      <br><br>
     <!-- Mensagem de erro -->
     @if (errorMessage()) {
       <div class="admin__alert" role="alert">{{ errorMessage() }}</div>
@@ -42,6 +42,7 @@
               <span class="tenant-card__slug">{{ tenant.slug }}</span>
             </div>
             <div class="tenant-card__actions">
+              <a [routerLink]="['/admin/tenants', tenant.id, 'usuarios']" class="tenant-card__edit">Usuários</a>
               <a [routerLink]="['/admin/tenants', tenant.id, 'editar']" class="tenant-card__edit">Editar</a>
               <button
                 type="button"

@@ -12,7 +12,9 @@
     <span class="eyebrow">Área do Cliente</span>
     <div class="lista__header">
       <h1 class="lista__title">Instrumentos</h1>
-      <a routerLink="/instrumentos/novo" class="lista__novo">+ Novo Instrumento</a>
+      @if (auth.isAdmin()) {
+        <a routerLink="/instrumentos/novo" class="lista__novo">+ Novo Instrumento</a>
+      }
     </div>
     <div class="filtros">
       <input
@@ -58,6 +60,9 @@
               <th>Descrição</th>
               <th>Última calibração</th>
               <th>Próxima calibração</th>
+              @if (auth.isAdmin()) {
+                <th></th>
+              }
               <th>Status</th>
             </tr>
           </thead>
@@ -69,9 +74,11 @@
                 <td>{{ i.descricao }}</td>
                 <td>{{ i.dataCertificacao ? (i.dataCertificacao | date: 'dd/MM/yyyy') : '---' }}</td>
                 <td>{{ i.proxCalibFormatada }}</td>
-                <td>
-                  <a [routerLink]="['/instrumentos', i.id, 'editar']" class="link-editar">Editar</a>
-                </td>
+                @if (auth.isAdmin()) {
+                  <td>
+                    <a [routerLink]="['/instrumentos', i.id, 'editar']" class="link-editar">Editar</a>
+                  </td>
+                }
                 <td>
                   <span
                     class="badge"

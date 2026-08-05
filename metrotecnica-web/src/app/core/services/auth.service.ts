@@ -108,6 +108,10 @@ export class AuthService {
     return this.role() === 'admin' && this.tenantId() === null;
   }
 
+  isAdmin(): boolean {
+    return this.role() === 'admin';
+  }
+
   private hasValidToken(): boolean {
     const payload = this.initialPayload;
     if (!payload) return false;
