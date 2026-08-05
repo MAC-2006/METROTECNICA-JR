@@ -24,7 +24,10 @@ export class PadroesService {
   }
 
   urlDownload(arquivo: string): string {
-    return `${this.apiUrl}/padroes/download?arquivo=${encodeURIComponent(arquivo)}`;
+    const token = this.auth.getToken();
+    const params = new URLSearchParams({ arquivo });
+    if (token) params.set('jwt', token);
+    return `${this.apiUrl}/padroes/download?${params.toString()}`;
   }
 
   // Mesmo padrão de XHR do migracao.service.ts — Fetch API não expõe progresso de upload.

@@ -36,9 +36,27 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 String email = jwtService.extractEmail(token);
 
                 if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-
                     if (jwtService.isTokenValid(token, email)) {
+                        // Carrega o usuário real (confirma que existe/está ativo)...
+                        UserDetails baseDetails = userDetailsService.loadUserByUsername(email);
+
+                        // ...mas monta o principal com role/tenant_id do TOKEN, não do banco.
+                        // Isso é o que faz o impersonate funcionar: o superadmin autentica
+                        // com o e-mail dele, porém "vestindo" o tenant_id da empresa acessada.
+                        Long tenantIdDoToken = jwtService.extractTenantId(token);
+                        String roleDoToken = jwtService.extractRole(token);
+
+
+
+                        UserDetails userDetails = baseDetails;
+                        if (baseDetails instanceof UserPrincipal existing) {
+                            boolean precisaOverride = !java.util.Objects.equals(existing.getTenantId(), tenantIdDoToken)
+                                    || !java.util.Objects.equals(existing.getRole(), roleDoToken);
+                            if (precisaOverride) {
+                                userDetails = new UserPrincipal(userDetailsService.carregarEntidade(email), roleDoToken, tenantIdDoToken);
+                            }
+                        }
+
                         UsernamePasswordAuthenticationToken authToken =
                                 new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                         authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -46,7 +64,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     }
                 }
             } catch (Exception e) {
-                // Token inválido/expirado: segue sem autenticar (endpoint protegido vai barrar com 401/403)
                 SecurityContextHolder.clearContext();
             }
         }
